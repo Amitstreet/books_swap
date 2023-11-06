@@ -4,7 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 
 function Signup() {
-  const [name, setName] = useState("");
+  const [name, setName] = useState("");// useref
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 

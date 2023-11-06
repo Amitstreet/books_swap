@@ -51,7 +51,7 @@ function CodeContent() {
           <p className="dark:text-slate-100">Solution</p>
         </button>
       </nav>
-      <div className="mt-2">
+      <div className="mt-2 w-full px-4 sm:px-6 md:px-8 lg:pl-72">
         <div
           id="tabs-with-card-1"
           role="tabpanel"

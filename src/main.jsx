@@ -15,7 +15,6 @@ import { Provider } from "react-redux";
 import store from "./Components/redux/Store.jsx"
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Sidebar from "./Components/Utils/Sidebar.jsx";
-
 import Signup from "./Components/Auth/Signup.jsx";
 import Login from "./Components/Auth/Login.jsx";
 import ForgotPass from "./Components/Auth/ForgotPass.jsx";
@@ -23,7 +22,8 @@ import Home from "./Home.jsx";
 import Profile from "./Components/Profile/Index.jsx";
 import CodeEditor from "./Components/Application/CodeEditor.tsx";
 import Compiler from "./Compiler.jsx";
-
+import Quastins_sumery from "./Components/Application/Quastins_sumery.jsx";
+import  CodeContent from "./Components/Application/CodeContent.jsx";
 
 
 const AppLayout = () => {
@@ -86,6 +86,17 @@ const router = createBrowserRouter([
         path: "/compiler",
         element: <Compiler/>,
       },
+
+      {
+       path:"/question/:id",
+       element:<Quastins_sumery/>
+      }
+
+      ,
+      {
+        path:"/question/:id/:id",
+        element:<CodeContent/>
+      }
       // {
       //   path: "/drawing",
       //   element: <DrawingApp/>,

@@ -25,15 +25,18 @@ function IO({ data }) {
     axios
       .post(url, data)
       .then((res) => {
+        console.log(res);
         setOutputPart(res);
         setCodeRunning(false);
       })
       .catch((err) => console.log(err));
   }
 
+  
   useEffect(() => {
     // This useEffect will run whenever codeText changes
     dispatch(changeStdin(inputPart));
+
   }, [inputPart]); // Specify codeText as a dependency
 
   function inputChange(e) {
@@ -41,20 +44,68 @@ function IO({ data }) {
   }
 
   function runClicked() {
-    // console.log("run clicked");
     setCodeRunning(true);
     codeRunner();
   }
 
+
+
   return (
     <div className="hs-accordion-group">
-      <button
+     <div>
+       <button
         type="button"
         className="w-full py-3 px-4 my-2 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-slate-900"
         onClick={runClicked}
       >
         Run
       </button>
+
+      <button
+        type="button"
+        className="w-full py-3 px-4 my-2 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-slate-900"
+        onClick={runClicked}
+      >
+        Submit
+      </button>
+      <div class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-slate-800 justify-around flex">
+      <div class="pt-3 md:pt-0 justify-around flex">
+                                        <a class="inline-flex justify-center items-center gap-x-2 text-center bg-violet-900 hover:bg-violet-700 border border-transparent text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-900 focus:ring-offset-2 focus:ring-offset-white transition py-2.5 px-3 dark:focus:ring-offset-gray-800" href="#">
+                          Test Case 1
+                                              </a>
+                                              <div class="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-green-600 rounded-full" role="status" aria-label="loading">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                                      </div>
+                                      <div class="pt-3 md:pt-0">
+                                        <a class="inline-flex justify-center items-center gap-x-2 text-center bg-violet-900 hover:bg-violet-700 border border-transparent text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-900 focus:ring-offset-2 focus:ring-offset-white transition py-2.5 px-3 dark:focus:ring-offset-gray-800" href="#">
+
+                Test Case2                                        </a>
+                <div class="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-green-600 rounded-full" role="status" aria-label="loading">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                                      </div>
+
+                                      <div class="pt-3 md:pt-0">
+                                        <a class="inline-flex justify-center items-center gap-x-2 text-center bg-violet-900 hover:bg-violet-700 border border-transparent text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-900 focus:ring-offset-2 focus:ring-offset-white transition py-2.5 px-3 dark:focus:ring-offset-gray-800" href="#">
+                                      Test Case3
+                                        </a>
+                                      </div>
+                                      <div class="pt-3 md:pt-0">
+                                        <a class="inline-flex justify-center items-center gap-x-2 text-center bg-violet-900 hover:bg-violet-700 border border-transparent text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-900 focus:ring-offset-2 focus:ring-offset-white transition py-2.5 px-3 dark:focus:ring-offset-gray-800" href="#">
+                                        Test Case4
+                                        </a>
+                                      </div>
+                                      <div class="pt-3 md:pt-0">
+                                        <a class="inline-flex justify-center items-center gap-x-2 text-center bg-violet-900 hover:bg-violet-700 border border-transparent text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-900 focus:ring-offset-2 focus:ring-offset-white transition py-2.5 px-3 dark:focus:ring-offset-gray-800" href="#">
+                                        Test Case5
+                                        </a>
+                                      </div>
+      </div>
+      </div> 
+     
+
+
 
       <div
         className="hs-accordion bg-white border -mt-px first:rounded-t-lg last:rounded-b-lg dark:bg-slate-900 dark:border-gray-700"
@@ -230,7 +281,7 @@ function IO({ data }) {
                                           <span className="w-4"></span>
                                         </>
                                       ) : (
-                                        <>
+                                     <>
                                           <p>{event}</p>
                                           <span className="w-4"></span>
                                         </>

@@ -9,7 +9,7 @@ export default function Login() {
   const dispatch = useDispatch(); // You need to call useDispatch as a function
   const [logToggle, setLogToggle] = useState(false);
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(""); // useref
   const [password, setPassword] = useState("");
 
   let data = {
