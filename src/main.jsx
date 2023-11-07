@@ -24,12 +24,14 @@ import CodeEditor from "./Components/Application/CodeEditor.tsx";
 import Compiler from "./Compiler.jsx";
 import Quastins_sumery from "./Components/Application/Quastins_sumery.jsx";
 import  CodeContent from "./Components/Application/CodeContent.jsx";
+import Dash_bord from "./Components/Application/dash_bord.jsx";
 
 
 const AppLayout = () => {
   return (
     <>
       <Provider store={store}>
+        
       <Nav />
       <Sidebar/>
       <Outlet />
@@ -96,6 +98,14 @@ const router = createBrowserRouter([
       {
         path:"/question/:id/:id",
         element:<CodeContent/>
+      }
+   ,
+
+      {
+        path:"/dash_bord",
+        element:<Dash_bord/>
+
+
       }
       // {
       //   path: "/drawing",
