@@ -1,5 +1,23 @@
-
+import { useParams } from "react-router-dom";
+import axios from 'axios';
 function Content() {
+
+  let m= useParams();
+
+
+      
+
+
+      axios.get('https://apiforcode.dailywith.me/question/java/5')
+  .then(response => {
+    // Handle the response
+    console.log(response)
+    console.log(response.data);
+ 
+  })
+  .catch(error => {
+    console.log(error)
+  });
   return (
     <>
       {/* Blog Article */}

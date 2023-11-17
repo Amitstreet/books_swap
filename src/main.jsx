@@ -1,11 +1,8 @@
 import("preline");
-
-
-
-
-
 // import React from "react";
 import ReactDOM from "react-dom/client";
+import 'react-toastify/dist/ReactToastify.css';
+
 import App from "./App.jsx";
 import "./index.css";
 import Nav from "./Components/Utils/Nev.jsx"
@@ -25,28 +22,47 @@ import Compiler from "./Compiler.jsx";
 import Quastins_sumery from "./Components/Application/Quastins_sumery.jsx";
 import  CodeContent from "./Components/Application/CodeContent.jsx";
 import Dash_bord from "./Components/Application/dash_bord.jsx";
+import Book_awap from './book_awap.jsx'
+import Side_bar_2 from "./Components/Utils/Side_bar_2.jsx";
+import Home_2 from './book_awap_como/home.jsx'
+import Testomonal from "./Components/Application/testomonal.jsx";
 
 
 const AppLayout = () => {
   return (
     <>
       <Provider store={store}>
-        
       <Nav />
       <Sidebar/>
       <Outlet />
+      
+
       <Foot />
+
       </Provider>
     </>
   );
 };
+
+const AppLayout_2 =()=>{
+
+  return  <>
+  <Provider store={store}>
+  <Nav />
+  <Side_bar_2/>
+    <Outlet />
+  </Provider>
+</>
+
+
+}
 
 
 function ErrorAll() {
   return (
     <>
     <Nav />
-    <Sidebar/>
+   
     <Error/>
     <Foot />
     </>
@@ -68,6 +84,7 @@ const router = createBrowserRouter([
         path: "/signup",
         element: <Signup />,
       },
+      
       {
         path: "/login",
         element: <Login />,
@@ -104,15 +121,32 @@ const router = createBrowserRouter([
       {
         path:"/dash_bord",
         element:<Dash_bord/>
-
-
       }
-      // {
-      //   path: "/drawing",
-      //   element: <DrawingApp/>,
-      // },
+      ,
+      {
+        path: "/testominal",
+        element: <Testomonal/>,
+      },
     ],
   },
+  {
+  path: "/bookswap",
+  element: <AppLayout_2  />,
+  errorElement: <ErrorAll />,
+
+  children: [
+    {
+      path: "hm2",
+      element: <Home_2/>,
+    }
+   
+    // {
+    //   path: "/drawing",
+    //   element: <DrawingApp/>,
+    // },
+  ]
+  }
+
 ]);
 
 

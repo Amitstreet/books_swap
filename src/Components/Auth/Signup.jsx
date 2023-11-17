@@ -1,18 +1,29 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import Loader from "../Application/loader";
 
 function Signup() {
   const [name, setName] = useState("");// useref
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loader,setloder]= useState(false);
+  const  [err,seterr]= useState('h');
+  
+
+console.log(err);
+const navigate = useNavigate()
 
   let data = {
     name:name,email:email,password:password
   }
 
+  console.log(loader)
+  
 const handleSignup = async (e) => {
+  setloder(true)
   e.preventDefault()
   let url = "https://apiforcode.dailywith.me/user/create";
   axios
@@ -23,17 +34,29 @@ const handleSignup = async (e) => {
       withCredentials: true
     })
     .then((res) => {
+      setloder(false)
+      navigate('/login')
       console.log(res.data);
+      toast(`Singup done`)
+
     })
-    .catch((err) => console.log(err));
-  console.log(JSON.stringify(data));
+    .catch((err) => 
+    { 
+      setloder(false)
+      console.log(err)
+      toast(`${err.response.data.error}`)
+    }
+    );
+  
 };
 
   return (
     <div className="lg:pl-72">
-      <main className="w-full max-w-md  mx-auto p-6">
+        <ToastContainer />
+
+   <main className="w-full max-w-md  mx-auto p-6">
         <div className=" mt-14 bg-white border border-[1px] border-gray-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-gray-700">
-          <div className="p-4 sm:p-7">
+          {loader==false?<div className="p-4 sm:p-7">
             <div className="text-center">
               <h1 className="block text-2xl font-bold text-slate-900 dark:text-white">
                 Sign up
@@ -271,9 +294,11 @@ const handleSignup = async (e) => {
               </form>
               {/* End Form */}
             </div>
-          </div>
+          </div>:<Loader/>
+}
         </div>
       </main>
+
     </div>
   );
 }

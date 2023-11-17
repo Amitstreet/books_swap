@@ -1,29 +1,63 @@
 import { Link } from "react-router-dom";
 import { setLogin } from "../redux/userData";
-import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch ,useSelector} from "react-redux";
 import { useEffect, useState } from "react";
-
+import Loader from "../Application/loader";
 import axios from "axios";
 
 export default function Login() {
   const dispatch = useDispatch(); // You need to call useDispatch as a function
   const [logToggle, setLogToggle] = useState(false);
-
+  const navigate = useNavigate()
   const [email, setEmail] = useState(""); // useref
   const [password, setPassword] = useState("");
+  const [loder,setloder]= useState(false)
+
+
+
+
+
+  let user = useSelector((store) => store.UserData.items.auth.isSignedin);
+  console.log(user);
+
+  if(user)
+  {
+    navigate('/question')
+  }
+  
+
+useEffect(()=>{
+  if(localStorage.getItem('token'))
+  {
+    navigate('/question');
+  }
+
+},[])
+ 
+
+
+  // if(localStorage.getItem('token'))
+  // {
+  //   dispatch(setLogin(true))
+  //   navigate('/question');
+  // }
+
+
+
 
   let data = {
     email:email,password:password
   }
 
-  useEffect(() => {
-    dispatch(setLogin(logToggle));
-  }, [logToggle]);
+ 
+
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
     let url = "https://apiforcode.dailywith.me/user/login";
-
+    setloder(true);
     axios
       .post(url, data, {
         headers: {
@@ -35,19 +69,26 @@ export default function Login() {
         // Handle successful login response
         console.log("Logged in successfully:", response.data);
         if (response.data.message == "successfully") {
-          setLogToggle(true);
+          dispatch(setLogin(true));
+          setloder(false);
+          localStorage.setItem('token', JSON.stringify(response.data.token));
         }
+          
       })
       .catch((error) => {
         // Handle login error
+        setloder(false);
         console.error("Login error:", error);
       });
   };
 
   return (
     <div className="lg:pl-72">
+      
       {/* <button onClick={() => setLogToggle(!logToggle)}>login</button> */}
-      <main className="w-full max-w-md mx-auto p-6">
+     
+     {
+     loder==false ? <main className="w-full max-w-md mx-auto p-6">
         <div className="mt-14 bg-white border border-[1px] border-gray-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-gray-700">
           <div className="p-4 sm:p-7">
             <div className="text-center">
@@ -225,7 +266,10 @@ export default function Login() {
             </div>
           </div>
         </div>
-      </main>
+      </main>:<Loader/>
+}
+
+
     </div>
   );
 }

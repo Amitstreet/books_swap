@@ -6,6 +6,9 @@ import { java } from "@codemirror/lang-java";
 
 function Solution() {
   let solution = useSelector((store) => store.IDEdata.items.solution);
+  
+
+
 
   return (
     <>

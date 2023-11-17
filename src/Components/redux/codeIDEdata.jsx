@@ -33,7 +33,7 @@ const codeIDEdata = createSlice({
     items: {
       "source": "import java.io.*;\nimport java.util.*;\nclass Main {\n\tpublic static void solution(String str){\n\t\tfor(int i = 0 ; i < str.length(); i++){\n\t\t\tfor(int j = i + 1; j <= str.length(); j++){\n\t\t\t\t// i -> starting point of substring, j-> ending point of substring\n\t\t\t\tif(isPalindrome(str.substring(i, j))){\n\t\t\t\t\tSystem.out.println(str.substring(i,j));\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\tpublic static boolean isPalindrome(String str){\n\t\tint i = 0, j = str.length() - 1;\n\t\twhile(i < j){\n\t\t\tif(str.charAt(i) != str.charAt(j)){\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\ti++;\n\t\t\tj--;\n\t\t}\n\t\treturn true;\n\t}\n\tpublic static void main(String[] args) {\n\t\tScanner scn = new Scanner(System.in);\n\t\tString str = scn.next();\n\t\tsolution(str);\n\t}\n}",
       // "source": "#include <iostream>\nusing namespace std;int main() {int number;cout << \"Enter an integer: \";cin >> number;cout << \"You entered \" << number;return 0;}",
-      "stdin": "abcc",
+      "stdin": "abcc\n",
       "compiler": "java1102",
       "options": {
         "userArguments": "",

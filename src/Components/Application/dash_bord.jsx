@@ -1,5 +1,5 @@
 import React from 'react'
-
+import Strek from '../Profile/Streak.jsx'
 
 function dash_bord() {
     const contributions = [0, 5, 3];
@@ -397,14 +397,21 @@ function dash_bord() {
 
   </div>
 </div>
+ 
 
+ 
 
                   
 
 
                  </div>
-                 
 
+
+ <div className='flex flex-col rounded-xl p-4 md:p-6 bg-white border border-gray-200 dark:bg-slate-900 dark:border-gray-700 mr-[18px] mt-3'>
+ <Strek />
+
+    </div>                
+  
 
                
 
