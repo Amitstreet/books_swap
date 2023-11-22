@@ -60,7 +60,6 @@ function IO({ data, sub }) {
     axios
       .post(url, data)
       .then((res) => {
-        console.log(main_data)
         setOutputPart(res);
         setCodeRunning(false);
       })
@@ -166,9 +165,9 @@ function IO({ data, sub }) {
                       </svg>
                       passed
                     </span>
-                  </div> : <Loader />) : (loader != true ? idx != 0 && <a class="inline-flex justify-center items-center gap-x-2 text-center bg-violet-900 hover:bg-violet-700 border border-transparent text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-900 focus:ring-offset-2 focus:ring-offset-white transition py-2.5 px-3 dark:focus:ring-offset-gray-800" href="#">
+                  </div> : idx!=0 && <Loader />) : (loader != true ? idx != 0 && <a class="inline-flex justify-center items-center gap-x-2 text-center bg-violet-900 hover:bg-violet-700 border border-transparent text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-900 focus:ring-offset-2 focus:ring-offset-white transition py-2.5 px-3 dark:focus:ring-offset-gray-800" href="#">
                     FAILED
-                  </a>:<Loader/>)
+                  </a>:idx!=0 && <Loader/>)
 
               }
               )
