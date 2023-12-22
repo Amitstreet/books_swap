@@ -6,15 +6,17 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { useDispatch } from "react-redux";
 import { changeCode } from "../redux/codeIDEdata";
 
-export default function CodeEditor({ cTheme,submit }) {
+export default function CodeEditor({ cTheme,submit,code}) {
   let data = useSelector((store) => store.IDEdata.items);
+  
 
-  const [codeText, setCodeText] = useState(data.source);
+  const [codeText, setCodeText] = useState(code.code_snippet);
   const dispatch = useDispatch();
 
   useEffect(() => {
     // This useEffect will run whenever codeText changes
     dispatch(changeCode(codeText));
+
   }, [codeText]); // Specify codeText as a dependency
 
   
@@ -28,7 +30,7 @@ export default function CodeEditor({ cTheme,submit }) {
     <>
       <CodeMirror
         className=" text-base"
-        value={codeText}
+        value={code.code_snippet}
         onChange={codeChange}
         // height={"600px"}
         theme={cTheme}

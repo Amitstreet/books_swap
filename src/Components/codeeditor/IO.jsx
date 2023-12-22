@@ -40,10 +40,8 @@ function IO({ data, sub }) {
 
 
   const extraction=(arr)=>{
-    
     let obj={};
     let idx=0;
-
     for (const element of arr.data) {
       obj["testcase" +`${idx}`] = element;
       idx++;
@@ -74,7 +72,6 @@ function IO({ data, sub }) {
     "source": 'import java.io.;\nimport java.util.;\n\n class Main {\n\n  public static void main(String[] args) throws Exception {\n    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n    int x = Integer.parseInt(br.readLine());\n    int n = Integer.parseInt(br.readLine());\n    int p = power(x, n);\n    System.out.println(p);\n  }\n\n  public static int power(int x, int n) {\n    if(n == 0){\n      return 1;\n    }\n    int xpnm1 = power(x, n - 1);\n    int xpn = xpnm1 * x;\n    return xpn;\n  }\n\n}\n\n\n\n'
   }
 
-  console.log(data.source)
 
   const post = async () => {
     testcase.submit=true;

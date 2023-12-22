@@ -1,20 +1,48 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { sublime } from "@uiw/codemirror-theme-sublime";
-
-// import Application from "./Application";
 import CodeEditor from "./CodeEditor";
+import { useParams } from 'react-router-dom';
+
 import Language from "../codeeditor/Languages";
 import EditorTheme from "../codeeditor/EditorTheme";
 import Content from "./Content";
 import Foot from "../Utils/Foot";
 import Solution from "./Solution"
 import Submitcode from "./Submitcode";
+import axios from 'axios';
 
 function CodeContent() {
+
+
+
+   
+  const { id } = useParams(); 
+   
+    console.log(id);
+
   const [cTheme, setCTheme] = useState(sublime);
   const [cLang, setCLang] = useState();
+  const [data,setdata]= useState({});
   const [code,setcode]=  useState("there is no submited code")
   
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `https://apiforcode.dailywith.me/question/java/${id}`
+        );
+        console.log(response.data.data[0].code_snippet);
+        setdata(response.data.data[0]);
+      } catch (error) {
+        
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
 
       const get_submit_code= (data)=>{
         setcode(data.source);
@@ -76,7 +104,7 @@ function CodeContent() {
           aria-labelledby="tabs-with-card-item-1"
         >
           <div className="p-4 bg-white border  first:rounded-t-lg mt-2 last:rounded-b-lg dark:bg-slate-900 dark:border-gray-700">
-            <Content />
+            <Content data={data} />
           </div>
         </div>
         <div
@@ -91,7 +119,7 @@ function CodeContent() {
               <EditorTheme setCTheme={setCTheme} />
             </div>
           </div>
-          <CodeEditor submit={get_submit_code} cLang={cLang} cTheme={cTheme} />
+          <CodeEditor submit={get_submit_code} code={data} cLang={cLang} cTheme={cTheme} />
         </div>
         <div
           id="tabs-with-card-3"

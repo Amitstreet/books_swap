@@ -61,8 +61,7 @@ const AppLayout_2 =()=>{
 function ErrorAll() {
   return (
     <>
-    <Nav />
-   
+    <Nav/>
     <Error/>
     <Foot />
     </>
@@ -80,27 +79,38 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
+
       {
         path: "/signup",
         element: <Signup />,
       },
+
       
       {
         path: "/login",
         element: <Login />,
       },
+
+
       {
         path: "/forgot-password",
         element: <ForgotPass />,
       },
+
+
       {
         path: "/question",
         element: <App />,
       },
+
+
+
       {
         path: "/profile",
         element: <Profile />,
       },
+
+
       {
         path: "/compiler",
         element: <Compiler/>,
@@ -108,21 +118,14 @@ const router = createBrowserRouter([
 
       {
        path:"/question/:id",
-       element:<Quastins_sumery/>
-      }
-
-      ,
-      {
-        path:"/question/:id/:id",
-        element:<CodeContent/>
-      }
-   ,
+       element:<CodeContent/>
+      },
 
       {
         path:"/dash_bord",
         element:<Dash_bord/>
-      }
-      ,
+      },
+      
       {
         path: "/testominal",
         element: <Testomonal/>,

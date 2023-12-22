@@ -1,23 +1,13 @@
 import { useParams } from "react-router-dom";
 import axios from 'axios';
-function Content() {
-
-  let m= useParams();
+function Content({data}) {
 
 
+    console.log(data);
       
 
 
-      axios.get('https://apiforcode.dailywith.me/question/java/5')
-  .then(response => {
-    // Handle the response
-    console.log(response)
-    console.log(response.data);
- 
-  })
-  .catch(error => {
-    console.log(error)
-  });
+    
   return (
     <>
       {/* Blog Article */}
@@ -26,11 +16,9 @@ function Content() {
           <div className="space-y-5 md:space-y-8">
             <div className="space-y-3">
               <h2 className="text-2xl font-bold md:text-3xl dark:text-white">
-                Print z
               </h2>
               <p className="text-lg text-slate-900 dark:text-gray-200">
-              1. You are required to print a 'z' of size 5 using '*'.
-
+                {data.question_text}
               </p>
             </div>
             <p className="text-lg text-slate-900 dark:text-gray-200">
@@ -38,7 +26,7 @@ function Content() {
             </p>
             
             <p className="text-lg text-slate-900 dark:text-gray-200 text-[white] p-1.5 bg-black">
-              There is no input
+              {data.demo_input}
             </p>
 
             <p className="text-lg text-slate-900 dark:text-gray-200">
@@ -46,12 +34,11 @@ function Content() {
             </p>
             
             <div className="aspect-w-16 aspect-h-9 w-fit">
-  <img
-    className="w-full object-cover"
-    src="https://pepcoding.com/resources/ojquestionresource/images/print-z-in-java.JPG"
-    alt="Image Description"
-  />
-</div>
+            <p className="text-lg text-slate-900 dark:text-gray-200">
+            {data.demo_output}
+
+            </p>
+</div> 
 
 <p className="text-lg text-slate-900 dark:text-gray-200">
             Input Format
@@ -64,18 +51,9 @@ function Content() {
             </p>
 
 
-            <p className="text-lg text-slate-900 dark:text-gray-200">
-            Sample Output
+        
 
-            </p>
-
-            <div className="aspect-w-16 aspect-h-9 w-fit">
-  <img
-    className="w-full object-cover"
-    src="https://pepcoding.com/resources/ojquestionresource/images/print-z-in-java.JPG"
-    alt="Image Description"
-  />
-</div>
+            
 
 
    

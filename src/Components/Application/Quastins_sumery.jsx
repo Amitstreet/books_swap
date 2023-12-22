@@ -1,4 +1,4 @@
-import React from 'react'
+import {React ,useState}  from 'react'
 import {Link} from 'react-router-dom'
 import { useParams } from "react-router-dom";
 import { get_qus_list } from '../../database';
@@ -6,14 +6,44 @@ import Qus_list from './qus_list';
 
 function Quastins_sumery() {
 
-       let m= useParams();
-       let data= get_qus_list(m.id);
-       console.log(data);       
+     const [filter,setfilter]= useState("");
+     
+     let arr_filter=["binary-tree","dynamic-programming-and-greedy","generic-tree","hashmap-and-heap","graphs","function-and-arrays","introduction-to-recursion","recursion-backtracking","getting-started","recursion-in-arrays","linked-lists","recursion-on-the-way-up","recursion-with-arraylists","string,-string-builder-and-arraylist","patterns","stacks-and-queues"]
+         
+     const add=(e)=>{
+
+        let filter_val= e.target.textContent;
+        setfilter(filter_val);
+     }
 
 
     return (
-        <>
+        <div className='flex justify-around w-full'>
             {/* Table Section */}
+            <div className="max-w-xs flex flex-col rounded-lg shadow-sm mt-[53px]">
+
+ {arr_filter.map((ele)=>{
+return  filter!= ele ? <button
+onClick={add}
+
+  type="button"
+  className="py-3 px-4 inline-flex items-center gap-x-2 rounded-t-md text-sm font-medium focus:z-10 border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+>
+ {ele}     
+  
+</button>: <button
+onClick={add}
+  
+  type="button"
+  className="py-3 px-4 bg-yellow-500 inline-flex items-center gap-x-2 rounded-t-md text-sm font-medium focus:z-10 border border-gray-200 text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:border-gray-700 dark:text-white   dark:hover:bg-gray-800  dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+>
+ {ele}     
+  
+</button>
+ })} 
+ 
+</div>
+
             <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
 
                 
@@ -79,7 +109,7 @@ function Quastins_sumery() {
                                         </tr>
                                     </thead>
                                        
-                                            <Qus_list qus={data} />
+                                            <Qus_list  fil_val={filter} />
                                         
                                     
                                     
@@ -95,7 +125,7 @@ function Quastins_sumery() {
                 {/* End Card */}
             </div>
             {/* End Table Section */}
-        </>
+        </div>
     )
 }
 
