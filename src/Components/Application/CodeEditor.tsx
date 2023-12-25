@@ -1,31 +1,27 @@
-import CodeMirror from "@uiw/react-codemirror";
 import { java } from "@codemirror/lang-java";
-import IO from "../codeeditor/IO";
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { useDispatch } from "react-redux";
 import { changeCode } from "../redux/codeIDEdata";
 
-export default function CodeEditor({ cTheme,submit,code}) {
+import IO from "../codeeditor/IO";
+import CodeMirror from "@uiw/react-codemirror";
+import React from "react";
+
+export default function CodeEditor({ cTheme, submit, code, io }) {
   let data = useSelector((store) => store.IDEdata.items);
-  
 
   const [codeText, setCodeText] = useState(code.code_snippet);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // This useEffect will run whenever codeText changes
     dispatch(changeCode(codeText));
-
-  }, [codeText]); // Specify codeText as a dependency
-
-  
+  }, [codeText]);
 
   function codeChange(e) {
     setCodeText(e);
   }
 
-  
   return (
     <>
       <CodeMirror
@@ -36,7 +32,7 @@ export default function CodeEditor({ cTheme,submit,code}) {
         theme={cTheme}
         extensions={[java()]}
       />
-      <IO sub={submit} data={data} />
+      <IO sub={submit} data={data} io={io} />
     </>
   );
 }

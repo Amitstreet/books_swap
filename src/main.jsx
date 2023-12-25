@@ -26,6 +26,7 @@ import Book_awap from './book_awap.jsx'
 import Side_bar_2 from "./Components/Utils/Side_bar_2.jsx";
 import Home_2 from './book_awap_como/home.jsx'
 import Testomonal from "./Components/Application/testomonal.jsx";
+import Drawing from "./Components/Drawing/DrawingApp.jsx"
 
 
 const AppLayout = () => {
@@ -130,6 +131,10 @@ const router = createBrowserRouter([
         path: "/testominal",
         element: <Testomonal/>,
       },
+      {
+        path: "/drawing",
+        element: <Drawing/>,
+      },
     ],
   },
   {
@@ -143,10 +148,6 @@ const router = createBrowserRouter([
       element: <Home_2/>,
     }
    
-    // {
-    //   path: "/drawing",
-    //   element: <DrawingApp/>,
-    // },
   ]
   }
 

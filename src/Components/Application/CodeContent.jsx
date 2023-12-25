@@ -1,52 +1,55 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { sublime } from "@uiw/codemirror-theme-sublime";
 import CodeEditor from "./CodeEditor";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
+
+import { useDispatch } from "react-redux";
 
 import Language from "../codeeditor/Languages";
 import EditorTheme from "../codeeditor/EditorTheme";
 import Content from "./Content";
 import Foot from "../Utils/Foot";
-import Solution from "./Solution"
+import Solution from "./Solution";
 import Submitcode from "./Submitcode";
-import axios from 'axios';
+import axios from "axios";
+
+import {changeStdin} from "../redux/codeIDEdata"
 
 function CodeContent() {
+  const { id } = useParams();
+  const dispatch = useDispatch();
 
-
-
-   
-  const { id } = useParams(); 
-   
-    console.log(id);
+  // console.log
+  (id);
 
   const [cTheme, setCTheme] = useState(sublime);
   const [cLang, setCLang] = useState();
-  const [data,setdata]= useState({});
-  const [code,setcode]=  useState("there is no submited code")
-  
+  const [data, setdata] = useState({});
+  const [code, setcode] = useState("there is no submited code");
+  const [io, setIo] = useState({input:"",expectedOutpot:""});
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `https://apiforcode.dailywith.me/question/java/${id}`
+      );
+      console.log(response.data.data[0]);
+      setdata(response.data.data[0]);
+      setIo({input:response.data.data[0].demo_input,expectedOutpot:response.data.data[0].demo_output});
+      dispatch(changeStdin(response.data.data[0].demo_input));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `https://apiforcode.dailywith.me/question/java/${id}`
-        );
-        console.log(response.data.data[0].code_snippet);
-        setdata(response.data.data[0]);
-      } catch (error) {
-        
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchData();
   }, [id]);
 
-
-      const get_submit_code= (data)=>{
-        setcode(data.source);
-      }
+  const get_submit_code = (data) => {
+    setcode(data.source);
+  };
 
   return (
     <>
@@ -119,7 +122,13 @@ function CodeContent() {
               <EditorTheme setCTheme={setCTheme} />
             </div>
           </div>
-          <CodeEditor submit={get_submit_code} code={data} cLang={cLang} cTheme={cTheme} />
+          <CodeEditor
+            submit={get_submit_code}
+            code={data}
+            cLang={cLang}
+            cTheme={cTheme}
+            io={io}
+          />
         </div>
         <div
           id="tabs-with-card-3"
@@ -127,7 +136,7 @@ function CodeContent() {
           role="tabpanel"
           aria-labelledby="tabs-with-card-item-3"
         >
-            <Solution/>
+          <Solution />
         </div>
         <div
           id="tabs-with-card-4"
@@ -135,11 +144,9 @@ function CodeContent() {
           role="tabpanel"
           aria-labelledby="tabs-with-card-item-4"
         >
-          <Submitcode code={code}/>
+          <Submitcode code={code} />
         </div>
-
       </div>
-      {/* <Foot/> */}
     </>
   );
 }

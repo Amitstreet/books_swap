@@ -1,17 +1,13 @@
-import React from 'react'
+import React from "react";
 
-import {Link} from  'react-router-dom'
-import Summery from './Quastins_sumery' 
+import { Link } from "react-router-dom";
+import Summery from "./Quastins_sumery";
 function Quastions() {
-
-    return (
-
-
-       <>
-        <Summery/>
-
-                </>
-    )
+  return (
+    <>
+      <Summery />
+    </>
+  );
 }
 
-export default Quastions
+export default Quastions;

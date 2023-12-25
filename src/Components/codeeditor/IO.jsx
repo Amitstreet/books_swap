@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useLocation, Navigate, useNavigate } from "react-router-dom";
+import { useLocation, Navigate, useNavigate, json } from "react-router-dom";
 import { changeStdin } from "../redux/codeIDEdata";
 import { useDispatch } from "react-redux";
 import Loader from "./loader";
 
-
-function IO({ data, sub }) {
-
-  const [inputPart, setInputPart] = useState("abcc");
+function IO({ data, sub, io }) {
+  const [inputPart, setInputPart] = useState("");
   const [outputPart, setOutputPart] = useState("");
   const [loader, setloader] = useState(false);
   const [testcase, settestcase] = useState({
@@ -18,40 +16,30 @@ function IO({ data, sub }) {
     test_case3: false,
     test_case4: false,
     test_case5: false,
-  })
+  });
   const navi = useNavigate();
-
-
-
-
-
 
   const dispatch = useDispatch();
 
   const [codeRunning, setCodeRunning] = useState(false);
 
-
-
-
   const submit = () => {
     dispatch(changeStdin("yyyyy"));
     codeRunner();
-  }
-
-
-  const extraction=(arr)=>{
-    let obj={};
-    let idx=0;
+  };
+  console.log(io)
+  const extraction = (arr) => {
+    let obj = {};
+    let idx = 0;
     for (const element of arr.data) {
-      obj["testcase" +`${idx}`] = element;
+      obj["testcase" + `${idx}`] = element;
       idx++;
     }
-    console.log(arr);
-     console.log(obj);
-      obj["submit"]=true;
-      return {...obj};
-  }
-
+    // console.log(arr);
+    // console.log(obj);
+    obj["submit"] = true;
+    return { ...obj };
+  };
 
   function codeRunner() {
     let url = "https://apiforcode.dailywith.me/java";
@@ -65,66 +53,61 @@ function IO({ data, sub }) {
   }
 
   let token = localStorage.getItem("token");
-  console.log(token);
-
+  // console.log(token);
 
   let s = {
-    "source": 'import java.io.;\nimport java.util.;\n\n class Main {\n\n  public static void main(String[] args) throws Exception {\n    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n    int x = Integer.parseInt(br.readLine());\n    int n = Integer.parseInt(br.readLine());\n    int p = power(x, n);\n    System.out.println(p);\n  }\n\n  public static int power(int x, int n) {\n    if(n == 0){\n      return 1;\n    }\n    int xpnm1 = power(x, n - 1);\n    int xpn = xpnm1 * x;\n    return xpn;\n  }\n\n}\n\n\n\n'
-  }
-
+    source:
+      "import java.io.;\nimport java.util.;\n\n class Main {\n\n  public static void main(String[] args) throws Exception {\n    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n    int x = Integer.parseInt(br.readLine());\n    int n = Integer.parseInt(br.readLine());\n    int p = power(x, n);\n    System.out.println(p);\n  }\n\n  public static int power(int x, int n) {\n    if(n == 0){\n      return 1;\n    }\n    int xpnm1 = power(x, n - 1);\n    int xpn = xpnm1 * x;\n    return xpn;\n  }\n\n}\n\n\n\n",
+  };
 
   const post = async () => {
-    testcase.submit=true;
-    let newobj = {...testcase};
+    testcase.submit = true;
+    let newobj = { ...testcase };
     settestcase(newobj);
 
     setloader(true);
     if (!localStorage.getItem("token")) {
-      navi('/login');
+      navi("/login");
     }
     sub(data);
     let url = "https://apiforcode.dailywith.me/submit/java/5";
-    axios.post(url, {
-      "source": "import java.io.*;\nimport java.util.*;\n\n class Main {\n\n  public static void main(String[] args) throws Exception {\n    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n    int x = Integer.parseInt(br.readLine());\n    int n = Integer.parseInt(br.readLine());\n    int p = power(x, n);\n    System.out.println(p);\n  }\n\n  public static int power(int x, int n) {\n    if(n == 0){\n      return 1;\n    }\n    int xpnm1 = power(x, n - 1);\n    int xpn = xpnm1 * x;\n    return xpn;\n  }\n\n}\n\n\n                        \n                                "
-    }
-      , {
-        headers: {
-          'Authorization': `Bearer ${token.substring(1, token.length - 1)}`
+    axios
+      .post(
+        url,
+        {
+          source:
+            "import java.io.*;\nimport java.util.*;\n\n class Main {\n\n  public static void main(String[] args) throws Exception {\n    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n    int x = Integer.parseInt(br.readLine());\n    int n = Integer.parseInt(br.readLine());\n    int p = power(x, n);\n    System.out.println(p);\n  }\n\n  public static int power(int x, int n) {\n    if(n == 0){\n      return 1;\n    }\n    int xpnm1 = power(x, n - 1);\n    int xpn = xpnm1 * x;\n    return xpn;\n  }\n\n}\n\n\n                        \n                                ",
         },
-        // withCredentials: true,
-      }).then((res) => {
-      setloader(false);
-      let obj = extraction(res.data);
-      settestcase(obj);
-      }).catch((err) => {
-        console.log(err)
-      }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
-  }
-
-
-
-
-
+      .then((res) => {
+        setloader(false);
+        let obj = extraction(res.data);
+        settestcase(obj);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     // This useEffect will run whenever codeText changes
     dispatch(changeStdin(inputPart));
-
   }, [inputPart]); // Specify codeText as a dependency
 
   function inputChange(e) {
     setInputPart(e.target.value);
-    console.log(e.target.value);
+    // console.log(e.target.value);
   }
-
 
   function runClicked() {
     setCodeRunning(true);
     codeRunner();
   }
-
-
 
   return (
     <div className="hs-accordion-group">
@@ -137,7 +120,7 @@ function IO({ data, sub }) {
           Run
         </button>
 
-        <button
+        {/* <button
           type="button"
           className="w-full py-3 px-4 my-2 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-slate-900"
           onClick={post}
@@ -146,38 +129,57 @@ function IO({ data, sub }) {
         </button>
         <div class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-slate-800 justify-around flex">
           <div class="pt-3 md:pt-0 w-[65rem] justify-around flex">
-            {
-
-              Object.keys(testcase).map((keyName, idx) => {
-
-                return testcase.submit == false ? idx != 0 && <a class="inline-flex justify-center items-center gap-x-2 text-center bg-violet-900 hover:bg-violet-700 border border-transparent text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-900 focus:ring-offset-2 focus:ring-offset-white transition py-2.5 px-3 dark:focus:ring-offset-gray-800" href="#">
-                  Test Case {idx}
-                </a> :
-
-                  idx != 0 && testcase[keyName] == true ? (loader != true ? <div>
+            {Object.keys(testcase).map((keyName, idx) => {
+              return testcase.submit == false ? (
+                idx != 0 && (
+                  <a
+                    class="inline-flex justify-center items-center gap-x-2 text-center bg-violet-900 hover:bg-violet-700 border border-transparent text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-900 focus:ring-offset-2 focus:ring-offset-white transition py-2.5 px-3 dark:focus:ring-offset-gray-800"
+                    href="#"
+                  >
+                    Test Case {idx}
+                  </a>
+                )
+              ) : idx != 0 && testcase[keyName] == true ? (
+                loader != true ? (
+                  <div>
                     <span class="py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                      <svg class="flex-shrink-0 w-3 h-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <svg
+                        class="flex-shrink-0 w-3 h-3"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
                         <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
                         <path d="m9 12 2 2 4-4"></path>
                       </svg>
                       passed
                     </span>
-                  </div> : idx!=0 && <Loader />) : (loader != true ? idx != 0 && <a class="inline-flex justify-center items-center gap-x-2 text-center bg-violet-900 hover:bg-violet-700 border border-transparent text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-900 focus:ring-offset-2 focus:ring-offset-white transition py-2.5 px-3 dark:focus:ring-offset-gray-800" href="#">
+                  </div>
+                ) : (
+                  idx != 0 && <Loader />
+                )
+              ) : loader != true ? (
+                idx != 0 && (
+                  <a
+                    class="inline-flex justify-center items-center gap-x-2 text-center bg-violet-900 hover:bg-violet-700 border border-transparent text-white text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-900 focus:ring-offset-2 focus:ring-offset-white transition py-2.5 px-3 dark:focus:ring-offset-gray-800"
+                    href="#"
+                  >
                     FAILED
-                  </a>:idx!=0 && <Loader/>)
-
-              }
-              )
-
-
-            }
+                  </a>
+                )
+              ) : (
+                idx != 0 && <Loader />
+              );
+            })}
           </div>
-
-        </div>
+        </div> */}
       </div>
-
-
-
 
       <div
         className="hs-accordion bg-white border -mt-px first:rounded-t-lg last:rounded-b-lg dark:bg-slate-900 dark:border-gray-700"
@@ -230,7 +232,6 @@ function IO({ data, sub }) {
           className="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300"
           aria-labelledby="hs-bordered-heading-two"
         >
-
           <div className="pb-4 px-5">
             <div className=" flex flex-col bg-white border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7]">
               <div className="flex flex-auto flex-col ">
@@ -239,7 +240,7 @@ function IO({ data, sub }) {
                   rows={3}
                   placeholder="Provide your custom input here"
                   //   defaultValue={""}
-                  value={inputPart}
+                  value={io.input}
                   onChange={inputChange}
                 />
                 {/* <p>{"# Compilation provided by Compiler Explorer at https://godbolt.org/".length}</p> */}
@@ -333,9 +334,10 @@ function IO({ data, sub }) {
                 ) : (
                   <>
                     <div className="min-h-[15rem] flex flex-col bg-white border shadow-base rounded-xl dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7]">
+                      {console.log(outputPart)}
                       <div className="flex flex-auto flex-col p-4 md:p-5">
-                        {outputPart.data
-                          .replace("Standard out:", "")
+                        {outputPart.data.output
+                          ?.replace("Standard out:", "")
                           .split("\n")
                           .map((line, index) => (
                             <div
