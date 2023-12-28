@@ -21,4 +21,5 @@ jobs:
         username: u252053937
         password: Google$$321
         local-dir: dist/
-        server-dir: /public_html/public_html/code/
+        server-dir: /domains/dailywith.me/public_html/code/
+        
