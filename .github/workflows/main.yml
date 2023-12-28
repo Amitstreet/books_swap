@@ -17,7 +17,7 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        server: ftp://217.196.54.222
+        server: 217.196.54.222
         username: u252053937
         password: Google$$321
         local-dir: dist/
