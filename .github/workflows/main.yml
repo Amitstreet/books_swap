@@ -20,5 +20,5 @@ jobs:
         server: ftp://217.196.54.222
         username: u252053937
         password: Google$$321
-        local-dir: dist
+        local-dir: dist/
         # server-dir: /path/to/remote/directory/
