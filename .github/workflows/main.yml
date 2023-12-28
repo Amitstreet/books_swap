@@ -21,4 +21,4 @@ jobs:
         username: u252053937
         password: Google$$321
         local-dir: dist/
-        # server-dir: /path/to/remote/directory/
+        server-dir: /demoonwhichiamtesting/
