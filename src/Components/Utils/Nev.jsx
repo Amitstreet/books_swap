@@ -18,7 +18,6 @@ function Nev() {
           dispatch(setLogin(false))
     }
 
-    git remote set-url origin https://github.com/Amitstreet/code_daily_with.git
 
   if (Cookies.get("token")) {
     dispatch(setLogin(true));
