@@ -4,9 +4,16 @@ import { useLocation, Navigate, useNavigate, json } from "react-router-dom";
 import { changeStdin } from "../redux/codeIDEdata";
 import { useDispatch } from "react-redux";
 import Loader from "./loader";
+import Cookies from "js-cookie"; // Import js-cookie library
+
 
 function IO({ data, sub, io }) {
-  const [inputPart, setInputPart] = useState("");
+
+ 
+  const [inputPart, setInputPart] = useState(",");
+
+  console.log(inputPart);
+
   const [outputPart, setOutputPart] = useState("");
   const [loader, setloader] = useState(false);
   const [testcase, settestcase] = useState({
@@ -17,6 +24,7 @@ function IO({ data, sub, io }) {
     test_case4: false,
     test_case5: false,
   });
+
   const navi = useNavigate();
 
   const dispatch = useDispatch();
@@ -52,8 +60,9 @@ function IO({ data, sub, io }) {
       .catch((err) => console.log(err));
   }
 
-  let token = localStorage.getItem("token");
+
   // console.log(token);
+  let token = Cookies.get("token");
 
   let s = {
     source:
@@ -61,14 +70,19 @@ function IO({ data, sub, io }) {
   };
 
   const post = async () => {
+    console.log("tess");
     testcase.submit = true;
     let newobj = { ...testcase };
     settestcase(newobj);
 
     setloader(true);
-    if (!localStorage.getItem("token")) {
+    // if (!localStorage.getItem("token")) {
+    //   navi("/login");
+    // }
+    if (!token) {
       navi("/login");
     }
+    console.log(data);
     sub(data);
     let url = "https://apiforcode.dailywith.me/submit/java/5";
     axios
@@ -86,10 +100,12 @@ function IO({ data, sub, io }) {
       )
       .then((res) => {
         setloader(false);
+        console.log(res);
         let obj = extraction(res.data);
         settestcase(obj);
       })
       .catch((err) => {
+        console.log("gg");
         console.log(err);
       });
   };
@@ -101,7 +117,7 @@ function IO({ data, sub, io }) {
 
   function inputChange(e) {
     setInputPart(e.target.value);
-    // console.log(e.target.value);
+    console.log(e.target.value);
   }
 
   function runClicked() {
@@ -120,7 +136,7 @@ function IO({ data, sub, io }) {
           Run
         </button>
 
-        {/* <button
+        <button
           type="button"
           className="w-full py-3 px-4 my-2 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-slate-900"
           onClick={post}
@@ -178,7 +194,7 @@ function IO({ data, sub, io }) {
               );
             })}
           </div>
-        </div> */}
+        </div>
       </div>
 
       <div
@@ -240,10 +256,10 @@ function IO({ data, sub, io }) {
                   rows={3}
                   placeholder="Provide your custom input here"
                   //   defaultValue={""}
-                  value={io.input}
+                  value={inputPart==","? io.input:inputPart }
                   onChange={inputChange}
                 />
-                {/* <p>{"# Compilation provided by Compiler Explorer at https://godbolt.org/".length}</p> */}
+                {/* <p>{"# Compilation provided by C ompiler Explorer at https://godbolt.org/".length}</p> */}
               </div>
             </div>
           </div>

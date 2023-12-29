@@ -5,34 +5,33 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Loader from "../Application/loader";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export default function Login() {
-  const dispatch = useDispatch(); // You need to call useDispatch as a function
+  const dispatch = useDispatch();
   const [logToggle, setLogToggle] = useState(false);
   const navigate = useNavigate();
-  const [email, setEmail] = useState(""); // useref
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loder, setloder] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   let user = useSelector((store) => store.UserData.items.auth.isSignedin);
-  // let alldata = useSelector((store) => store);
-  // console.log(alldata);
 
   if (user) {
     navigate("/question");
   }
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      dispatch(setJWT(localStorage.getItem("token")));
+    const token = Cookies.get("token");
+    if (token) {
+      dispatch(setJWT(token));
       navigate("/question");
     }
   }, []);
 
-  if(localStorage.getItem('token'))
-  {
-    dispatch(setLogin(true))
-    navigate('/question');
+  if (Cookies.get("token")) {
+    dispatch(setLogin(true));
+    navigate("/question");
   }
 
   let data = {
@@ -43,7 +42,8 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     let url = "https://apiforcode.dailywith.me/user/login";
-    setloder(true);
+    setLoader(true);
+
     axios
       .post(url, data, {
         headers: {
@@ -52,27 +52,29 @@ export default function Login() {
         withCredentials: true,
       })
       .then((response) => {
-        // Handle successful login response
         console.log("Logged in successfully:", response.data.token);
-        if (response.data.message == "successfully") {
+        if (response.data.message === "successfully") {
           dispatch(setLogin(true));
-          localStorage.setItem("token", response.data.token);
+          Cookies.set("token", response.data.token); // Set the token in cookies
           dispatch(setJWT(response.data.token));
-          setloder(false);
+          setLoader(false);
         }
       })
       .catch((error) => {
-        // Handle login error
-        setloder(false);
+        setLoader(false);
         console.error("Login error:", error);
       });
   };
+
+  // ... rest of the component
+
+
 
   return (
     <div className="lg:pl-72">
       {/* <button onClick={() => setLogToggle(!logToggle)}>login</button> */}
 
-      {loder == false ? (
+      {loader == false ? (
         <main className="w-full max-w-md mx-auto p-6">
           <div className="mt-14 bg-white border border-[1px] border-gray-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-gray-700">
             <div className="p-4 sm:p-7">

@@ -22,6 +22,7 @@ export default function CodeEditor({ cTheme, submit, code, io }) {
     setCodeText(e);
   }
 
+
   return (
     <>
       <CodeMirror
@@ -32,7 +33,7 @@ export default function CodeEditor({ cTheme, submit, code, io }) {
         theme={cTheme}
         extensions={[java()]}
       />
-      <IO sub={submit} data={data} io={io} />
+      <IO   sub={submit} data={data} io={io} />
     </>
   );
 }

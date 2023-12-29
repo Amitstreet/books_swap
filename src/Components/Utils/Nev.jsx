@@ -4,6 +4,8 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../redux/userData";
+import Cookies from "js-cookie"; // Import Cookies
+
 
 function Nev() {
   let user = useSelector((store) => store.UserData.items.auth.isSignedin);
@@ -11,14 +13,17 @@ function Nev() {
     const dispatch = useDispatch();
 
     const setlogout=()=>{
-      localStorage.removeItem("token");
+      Cookies.remove("token"); // Remove the token from cookies
+
           dispatch(setLogin(false))
     }
 
-    if(localStorage.getItem('token'))
-    {
-      dispatch(setLogin(true))
-    }
+    git remote set-url origin https://github.com/Amitstreet/code_daily_with.git
+
+  if (Cookies.get("token")) {
+    dispatch(setLogin(true));
+  }
+
 
     
 
