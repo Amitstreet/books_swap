@@ -1,74 +1,15 @@
 import { Link } from "react-router-dom";
-import { setLogin, setJWT } from "../redux/userData";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import Loader from "../Application/loader";
 import axios from "axios";
 import Cookies from "js-cookie";
 
 export default function Login() {
-  const dispatch = useDispatch();
-  const [logToggle, setLogToggle] = useState(false);
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loader, setLoader] = useState(false);
-
-  let user = useSelector((store) => store.UserData.items.auth.isSignedin);
-
-  if (user) {
-    navigate("/question");
-  }
-
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (token) {
-      dispatch(setJWT(token));
-      navigate("/question");
-    }
-  }, []);
-
-  if (Cookies.get("token")) {
-    dispatch(setLogin(true));
-    navigate("/question");
-  }
-
-  let data = {
-    email: email,
-    password: password,
-  };
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    let url = "https://apiforcode.dailywith.me/user/login";
-    setLoader(true);
-
-    axios
-      .post(url, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log("Logged in successfully:", response.data.token);
-        if (response.data.message === "successfully") {
-          dispatch(setLogin(true));
-          Cookies.set("token", response.data.token); // Set the token in cookies
-          dispatch(setJWT(response.data.token));
-          setLoader(false);
-        }
-      })
-      .catch((error) => {
-        setLoader(false);
-        console.error("Login error:", error);
-      });
-  };
 
   // ... rest of the component
 
-
+let loader= false;
 
   return (
     <div className="lg:pl-72">
@@ -127,7 +68,7 @@ export default function Login() {
                   Or
                 </div>
                 {/* Form */}
-                <form onSubmit={handleLogin}>
+                <form >
                   <div className="grid gap-y-4">
                     {/* Form Group */}
                     <div>
@@ -255,7 +196,7 @@ export default function Login() {
           </div>
         </main>
       ) : (
-        <Loader />
+        <h1/>
       )}
     </div>
   );
