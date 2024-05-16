@@ -6,23 +6,29 @@ import "./index.css";
 import Nav from "./Components/Utils/Nev.jsx"
 import Foot from "./Components/Utils/Foot.jsx"
 import Error from "./Error.jsx"
-import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Sidebar from "./Components/Utils/Sidebar.jsx";
 import Signup from "./Components/Auth/Signup.jsx";
 import Login from "./Components/Auth/Login.jsx";
 import ForgotPass from "./Components/Auth/ForgotPass.jsx";
 import Home from "./Home.jsx";
-import Profile from "./Components/Profile/Index.jsx";
 import Book from './books.jsx';
-
+import Add_prod from "./Components/form/add_prod.jsx";
+import { store, persistor } from './redux/store.js';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 const AppLayout = () => {
   return (
     <>
+    
+    <PersistGate persistor={persistor}>
+    <Provider store={store}>
       <Nav />
       <Sidebar/>
        <Outlet />
       <Foot />
+      </Provider>
+  </PersistGate>
     </>
   );
 };
@@ -74,6 +80,10 @@ const router = createBrowserRouter([
 
       },
 
+      {
+        path:"/add-book",
+        element:<Add_prod/>,
+      }
 
     ],
   },

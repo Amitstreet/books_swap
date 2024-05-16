@@ -3,19 +3,51 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {login } from "../../api/Auth";
 import Cookies from "js-cookie";
+
 
 export default function Login() {
 
-  // ... rest of the component
 
-let loader= false;
+
+  const navigate = useNavigate();
+  let [user, setuser] = useState({
+    email: "",
+    password: "",
+  })
+  
+ let [loader,setloader]= useState(false) 
+  const handlechange = (e) => {
+    setuser((user) => {
+      return {
+        ...user,[e.target.name]:e.target.value
+      }
+    })
+  }
+  const submit=async (e)=>  {
+    console.log("tr")
+    setloader(true)
+    e.preventDefault();
+    try
+    {
+    let res= await login(user);
+    console.log(res)
+    setloader(false)
+    navigate('/book')
+    }
+    catch(err)
+    {
+      console.log(err);
+      setloader(false)
+    }
+  }
 
   return (
     <div className="lg:pl-72">
       {/* <button onClick={() => setLogToggle(!logToggle)}>login</button> */}
 
-      {loader == false ? (
+      (
         <main className="w-full max-w-md mx-auto p-6">
           <div className="mt-14 bg-white border border-[1px] border-gray-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-gray-700">
             <div className="p-4 sm:p-7">
@@ -68,7 +100,7 @@ let loader= false;
                   Or
                 </div>
                 {/* Form */}
-                <form >
+                <form  onSubmit={submit}>
                   <div className="grid gap-y-4">
                     {/* Form Group */}
                     <div>
@@ -82,10 +114,9 @@ let loader= false;
                         <input
                           type="email"
                           id="email"
+                          value={user.email}
                           name="email"
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                          }}
+                          onChange={handlechange}
                           className="py-3 px-4 block w-full border-[1px] border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
                           required=""
                           aria-describedby="email-error"
@@ -133,9 +164,8 @@ let loader= false;
                           type="password"
                           id="password"
                           name="password"
-                          onChange={(e) => {
-                            setPassword(e.target.value);
-                          }}
+                          value={user.password}
+                          onChange={handlechange}
                           className="py-3 px-4 block w-full border-[1px] border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
                           required=""
                           aria-describedby="password-error"
@@ -195,9 +225,7 @@ let loader= false;
             </div>
           </div>
         </main>
-      ) : (
-        <h1/>
-      )}
+      )
     </div>
   );
 }
