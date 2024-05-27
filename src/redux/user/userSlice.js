@@ -4,6 +4,7 @@ const initialState = {
   currentUser: null,
   error: null,
   loading: false,
+  location:null,
 };
 
 const userSlice = createSlice({
@@ -55,6 +56,10 @@ const userSlice = createSlice({
       state.error = null;
       state.loading = false;
     },
+    add_location:(state,action)=>
+    {
+      state.location=action.payload
+    }
   },
 });
 
@@ -69,6 +74,7 @@ export const {
   deleteUserSuccess,
   deleteUserFailure,
   signoutSuccess,
+  add_location
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -1,7 +1,7 @@
 // authApi.js
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:4000/api/auth'; // Replace with your API base URL
+const BASE_URL = 'https://backend-1-dar6.onrender.com/api/auth'; // Replace with your API base URL
 
 export const login = async ({email,password}) => {
   try {
@@ -33,7 +33,7 @@ export const signup = async ({username, email, password}) => {
 
 export const logout = async () => {
   try {
-    const response = await axios.post(`${BASE_URL}/logout`);
+    const response = await axios.post(`${BASE_URL}/signout`);
     return response.data;
   } catch (error) {
     throw error.response.data; // Handle logout errors
@@ -41,3 +41,4 @@ export const logout = async () => {
 };
 
 // Other authentication API functions can be added here
+

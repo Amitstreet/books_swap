@@ -5,19 +5,24 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import {login } from "../../api/Auth";
 import Cookies from "js-cookie";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from '../../redux/user/userSlice.js'
+
 
 
 export default function Login() {
 
-
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   let [user, setuser] = useState({
     email: "",
     password: "",
   })
-  
- let [loader,setloader]= useState(false) 
+
+  let [loader,setloader]= useState(false) 
   const handlechange = (e) => {
     setuser((user) => {
       return {
@@ -25,14 +30,16 @@ export default function Login() {
       }
     })
   }
+  
   const submit=async (e)=>  {
-    console.log("tr")
-    setloader(true)
+    console.log("yres")
     e.preventDefault();
+    dispatch(signInStart());
+    setloader(true)
     try
     {
     let res= await login(user);
-    console.log(res)
+    dispatch(signInSuccess(res));
     setloader(false)
     navigate('/book')
     }

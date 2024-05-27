@@ -1,146 +1,237 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import axios from 'axios';
+import { add_book,edit_book } from '../../api/book';
+import Stepper from '../Utils/stepper';
+import useStepper from '../../hook/useStepper';
 
-function add_prod() {
+function AddProd({ editbook = null ,seteditbook}) {
+
+  const { currentStep, nextStep, prevStep } = useStepper();
+  const [image, setnewimage] = useState(null);
+  const  user = useSelector(state => state);
+  const [file, setFile] = useState(null);
+  const [data, setData] = useState(editbook == null ? {
+    id: user.user.currentUser._id, bookname: "", writer: "", url: "", catogery: "", description: ""
+  } : editbook);
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const updateimage = () => {
+    setnewimage(true);
+  }
+
+  
+  const handleFile = (e) => {
+    const file = e.target.files[0];
+    setFile(file);
+  };
+
+  const handle = (e) => {
+    setData((prevData) => ({
+      ...prevData, [e.target.name]: e.target.value
+    }));
+  };
+
+  useEffect(() => {
+    const isValid = data.bookname && data.writer && file && data.catogery && data.description;
+    setIsFormValid(isValid);
+  }, [data, file]);
+
+  async function submitForm(e) {
+    e.preventDefault();
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'ml_default');  
+    
+    try {
+      console.log("yes")
+
+      if(editbook == null || image==true)
+        {
+          console.log("yes")
+       const response = await fetch('https://api.cloudinary.com/v1_1/dmc8lom8k/image/upload', {
+        method: 'POST',
+        body: formData
+      });
+    
+      nextStep();
+      let ndata = await response.json();
+      console.log(response);
+      data["url"] = ndata.url;
+    }
+      setData(data);
+      if(editbook==null)
+        {
+      const resp = await add_book(data);
+        }
+        else
+        {
+          console.log(data)
+          const result= await edit_book(data);
+        }
+        seteditbook(null);
+      nextStep();
+    } catch (error) {
+      console.error('Error uploading:', error);
+      // Handle failure
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+
+
+
   return (
     <div>
+      <>
+        {/* Card Section */}
+        <div className="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+          <Stepper currentStep={currentStep} />
+          <form onSubmit={submitForm}>
+            {/* Card */}
+            <div className="bg-white rounded-xl shadow dark:bg-neutral-900">
+              <div className="pt-0 p-4 sm:pt-0 sm:p-7">
+                {/* Grid */}
+                <div className="space-y-4 sm:space-y-6">
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="af-submit-app-project-name"
+                      className="inline-block text-sm font-medium text-gray-800 mt-2.5 dark:text-neutral-200"
+                    >
+                      Book name
+                    </label>
+                    <input
+                      value={data.bookname}
+                      onChange={handle}
+                      name="bookname"
+                      id="af-submit-app-project-name"
+                      type="text"
+                      className="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                      placeholder="Enter project name"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="af-submit-project-url"
+                      className="inline-block text-sm font-medium text-gray-800 mt-2.5 dark:text-neutral-200"
+                    >
+                      Book writer
+                    </label>
+                    <input
+                      value={data.writer}
+                      onChange={handle}
+                      name="writer"
+                      id="af-submit-project-url"
+                      type="text"
+                      className="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                      placeholder="https://example.so"
+                    />
+                  </div>
+                  <div className="sm:col-span-9">
+                    {image == true || editbook == null ? <div space-y-2>
+
+                      <label
+                        // htmlFor="af-submit-app-project-name"
+                        className="inline-block text-sm font-medium mb-4 text-gray-800 mt-2.5 dark:text-neutral-200"
+                      >
+                        Book Image
+                      </label>
+                      <label htmlFor="af-submit-application-resume-cv" className="sr-only">
+                        Choose file
+                      </label>
+                      <input
+                        onChange={handleFile}
+                        type="file"
+                        // value={"nnn"}
+
+                        className="block w-full border border-gray-200 rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400
+                          file:bg-gray-50 file:border-0
+                          file:bg-gray-100 file:me-4
+                          file:py-2 file:px-4
+                          dark:file:bg-neutral-700 dark:file:text-neutral-400"
+                      />
+                    </div> :
+                      <div>
+                        {editbook != null && <button onClick={updateimage} type="button" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-gray-500 text-white hover:bg-gray-600 disabled:opacity-50 disabled:pointer-events-none">
+                          Want to Upload new Image
+                        </button>}
 
 
-<>
-  {/* Card Section */}
-  <div className="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-    <form>
-      {/* Card */}
-      <div className="bg-white rounded-xl shadow dark:bg-neutral-900">
-  +
-        <div className="pt-0 p-4 sm:pt-0 sm:p-7">
-          {/* Grid */}
-          <div className="space-y-4 sm:space-y-6">
-            
-            <div className="space-y-2">
-              <label
-                htmlFor="af-submit-app-project-name"
-                className="inline-block text-sm font-medium text-gray-800 mt-2.5 dark:text-neutral-200"
-              >
-                Book name
-              </label>
-              <input
-                id="af-submit-app-project-name"
-                type="text"
-                className="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                placeholder="Enter project name"
-              />
+                      </div>}
+
+                  </div>
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="af-submit-app-category"
+                      className="inline-block text-sm font-medium text-gray-800 mt-2.5 dark:text-neutral-200"
+                    >
+                      Category
+                    </label>
+                    <select
+                      value={data.catogery}
+                      name="catogery"
+                      onChange={handle}
+                      id="af-submit-app-category"
+                      className="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                    >
+                      <option value="">Select a category</option>
+                      <option>Story</option>
+                      <option>Poetry</option>
+                      <option>Novel</option>
+                      <option>Study</option>
+                      <option>Romance</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="af-submit-app-description"
+                      className="inline-block text-sm font-medium text-gray-800 mt-2.5 dark:text-neutral-200"
+                    >
+                      Description
+                    </label>
+                    <textarea
+                      value={data.description}
+                      onChange={handle}
+                      name="description"
+                      id="af-submit-app-description"
+                      className="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                      rows={6}
+                      placeholder="A detailed summary will better explain your products to the audiences. Our users will see this in your dedicated product page."
+                    />
+                  </div>
+                </div>
+                {/* End Grid */}
+                <div className="mt-5 flex justify-center gap-x-2">
+                  <button
+                    type="submit"
+                    disabled={editbook == null && !isFormValid || isLoading}
+                    className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                  >
+                    {isLoading ? (
+                      <>
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                        </svg>
+                        <span>Loading...</span>
+                      </>
+                    ) : (
+                      <span> {editbook == null ? "Submit your Book" : "edit"}</span>
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="space-y-2">
-              <label
-                htmlFor="af-submit-project-url"
-                className="inline-block text-sm font-medium text-gray-800 mt-2.5 dark:text-neutral-200"
-              >
-                Book writer
-              </label>
-              <input
-                id="af-submit-project-url"
-                type="text"
-                className="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                placeholder="https://example.so"
-              />
-            </div>
-            <div className="space-y-2">
-              <label
-                htmlFor="af-submit-app-upload-images"
-                className="inline-block text-sm font-medium text-gray-800 mt-2.5 dark:text-neutral-200"
-              >
-                Upload image
-              </label>
-              <label
-                htmlFor="af-submit-app-upload-images"
-                className="group p-4 sm:p-7 block cursor-pointer text-center border-2 border-dashed border-gray-200 rounded-lg focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:border-neutral-700"
-              >
-                <input
-                  id="af-submit-app-upload-images"
-                  name="af-submit-app-upload-images"
-                  type="file"
-                  className="sr-only"
-                />
-                <svg
-                  className="size-10 mx-auto text-gray-400 dark:text-neutral-600"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={16}
-                  height={16}
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.646 5.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2z"
-                  />
-                  <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z" />
-                </svg>
-                <span className="mt-2 block text-sm text-gray-800 dark:text-neutral-200">
-                  Browse your device or{" "}
-                  <span className="group-hover:text-blue-700 text-blue-600">
-                    drag 'n drop'
-                  </span>
-                </span>
-                <span className="mt-1 block text-xs text-gray-500 dark:text-neutral-500">
-                  Maximum file size is 2 MB
-                </span>
-              </label>
-            </div>
-            <div className="space-y-2">
-              <label
-                htmlFor="af-submit-app-category"
-                className="inline-block text-sm font-medium text-gray-800 mt-2.5 dark:text-neutral-200"
-              >
-                Category
-              </label>
-              <select
-                id="af-submit-app-category"
-                className="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-              >
-                <option selected="">Select a category</option>
-                <option>storey</option>
-                <option>Poeatry</option>
-                <option>Novel</option>
-                <option>Study</option>
-                <option>Romance</option>
-              </select>
-            </div>
-            <div className="space-y-2">
-              <label
-                htmlFor="af-submit-app-description"
-                className="inline-block text-sm font-medium text-gray-800 mt-2.5 dark:text-neutral-200"
-              >
-                Description
-              </label>
-              <textarea
-                id="af-submit-app-description"
-                className="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                rows={6}
-                placeholder="A detailed summary will better explain your products to the audiences. Our users will see this in your dedicated product page."
-                defaultValue={""}
-              />
-            </div>
-          </div>
-          {/* End Grid */}
-          <div className="mt-5 flex justify-center gap-x-2">
-            <button
-              type="button"
-              className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-            >
-              Submit your Book
-            </button>
-          </div>
+            {/* End Card */}
+          </form>
         </div>
-      </div>
-      {/* End Card */}
-    </form>
-  </div>
-  {/* End Card Section */}
-</>
-
-
+        {/* End Card Section */}
+      </>
     </div>
-  )
+  );
 }
 
-export default add_prod
+export default AddProd;

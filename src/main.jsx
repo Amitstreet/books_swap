@@ -17,6 +17,8 @@ import Add_prod from "./Components/form/add_prod.jsx";
 import { store, persistor } from './redux/store.js';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import Profile from './Profile.jsx'
+import Nearest from "./nearest.jsx";
 const AppLayout = () => {
   return (
     <>
@@ -29,6 +31,8 @@ const AppLayout = () => {
       <Foot />
       </Provider>
   </PersistGate>
+
+
     </>
   );
 };
@@ -83,6 +87,14 @@ const router = createBrowserRouter([
       {
         path:"/add-book",
         element:<Add_prod/>,
+      }
+      ,{
+        path:"/profile",
+        element:<Profile/>,
+      }
+      ,{
+        path:"/nearest",
+        element:<Nearest/>
       }
 
     ],
