@@ -4,12 +4,8 @@ import {getNearestLocation} from './api/location.js'
 import { useSelector } from "react-redux";
 
 function nearest() {
-
-
   let [user1,setuser]= useState(null);
-
   const user = useSelector(state => state);
-
   console.log(user.user.location)
    useEffect(()=>{
           const nearest_user= async ()=>{
@@ -18,14 +14,11 @@ function nearest() {
       }
     nearest_user();
    },[])
-
+   
    if(user1 !=null)
     {
    console.log(user1.users)
     }
-
-
-
 
   return (
     <div>

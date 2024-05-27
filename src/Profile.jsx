@@ -3,21 +3,29 @@ import { useState } from 'react';
 import { useSelector } from "react-redux";
 import { getbook_user } from './api/book';
 import Add_prod  from './Components/form/add_prod.jsx'
+import { useNavigate } from 'react-router-dom';
 
 
 function Profile() {
   const user = useSelector(state => state);
   const [editbook, seteditbook] = useState(null);
   let [book, setbook] = useState(null)
+  let navigate = useNavigate();
 
-  console.log(user.user)
+  if(user.user.currentUser==null)
+    {
+        navigate('/login')
+    }
   
   useEffect(() => {
+    if(user.user.currentUser!=null)
+        {
     const getres = async () => {
       let books = await getbook_user({ id: user.user.currentUser._id });
       setbook(books.book);
     }
     getres();
+}
   }, [editbook])
 
 
@@ -35,7 +43,7 @@ function Profile() {
     <div>
       <>
    
-     { editbook != null ? <Add_prod editbook= {editbook} seteditbook={seteditbook}  /> :  <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white flex items-center justify-center min-h-screen p-4 transition-colors">
+     { editbook != null ? <Add_prod editbook= {editbook} seteditbook={seteditbook}  /> :  user.user.currentUser && <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white flex items-center justify-center min-h-screen p-4 transition-colors">
     <div class="absolute top-4 right-4">
         <button onclick="toggleDarkMode()" class="bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all">
             Toggle Theme
@@ -107,7 +115,7 @@ function Profile() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
                 {
                     book && book.map((ele) => {
-                        return <div className="bg-gray-100 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+                        return <div key={ele._id} className="bg-gray-100 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
                             <img
                                 className="w-full h-48 object-cover"
                                 src={ele.url}
@@ -130,16 +138,16 @@ function Profile() {
                         </div>
                     })
                 }
-                {book == null && <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-8">
-                    <div className="flex justify-center items-center h-48 bg-gray-100 dark:bg-gray-700 rounded-md w-full">
+                {(!book || book.length === 0) && (
+                    <div className="col-span-full flex justify-center items-center h-48 bg-gray-100 dark:bg-gray-700 rounded-md w-full">
                         <p className="text-gray-900 dark:text-white text-2xl font-bold">There are no books added</p>
                     </div>
-                </div>
-                }
+                )}
             </div>
         </div>
     </div>
-</body>}
+</body>
+}
       </>
     </div>
   )

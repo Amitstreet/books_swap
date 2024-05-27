@@ -4,8 +4,6 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import LocationComponent from "./Components/locations";
 
 function Home() {
-
-
   
  return (
       <>
