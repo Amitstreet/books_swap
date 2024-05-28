@@ -21,11 +21,12 @@ const LocationComponent = () => {
         }
     useEffect(()=>{       
             const add_location= async ()=>{
-            if(nlocation.latitude!=null)
+            if(nlocation.latitude!=null && user!=null)
 
     {
     let coordinates= [];
     coordinates.push(nlocation.longitude,nlocation.latitude);
+       
                let userid=user._id;      
                add_current_location( {
                 "userid": userid ,
@@ -54,11 +55,12 @@ const LocationComponent = () => {
     }
 
     return (
-        <div>
-            <h1>Your Current Location</h1>
-            <p>Latitude: {nlocation.latitude}</p>
-            <p>Longitude: {nlocation.longitude}</p>
-        </div>
+        <div class="bg-white dark:bg-gray-700 text-black dark:text-white p-6 rounded-lg shadow-lg m-4">
+        <h1 class="text-lg font-semibold mb-2">Your Current Location</h1>
+        <p class="mb-1">Latitude: {nlocation.latitude}</p>
+        <p class="mb-1">Longitude: {nlocation.longitude}</p>
+    </div>
+    
     );
 };
 
