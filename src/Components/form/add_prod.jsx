@@ -15,7 +15,7 @@ function AddProd({ editbook = null, seteditbook }) {
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [data, setData] = useState(editbook == null && user.currentUser != null ? {
-    id: user.currentUser._id, bookname: "", writer: "", url: "", category: "", description: ""
+    id: user.currentUser._id, bookname: "", writer: "", url: "", catogery: "", description: ""
   } : editbook);
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +47,7 @@ function AddProd({ editbook = null, seteditbook }) {
 
   useEffect(() => {
     if (user.currentUser != null) {
-      const isValid = data.bookname && data.writer && file && data.category && data.description;
+      const isValid = data.bookname && data.writer && file && data.catogery && data.description;
       setIsFormValid(isValid);
     }
   }, [data, file]);
@@ -58,6 +58,8 @@ function AddProd({ editbook = null, seteditbook }) {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', 'ml_default');
+    console.log(formData)
+    console.log(data)
 
     try {
       if (editbook == null || image === true) {
@@ -168,8 +170,8 @@ function AddProd({ editbook = null, seteditbook }) {
                       Category
                     </label>
                     <select
-                      value={data.category}
-                      name="category"
+                      value={data.catogery}
+                      name="catogery"
                       onChange={handle}
                       id="af-submit-app-category"
                       className="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
