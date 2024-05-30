@@ -74,5 +74,8 @@
   animation: shimmer 1.5s infinite;
 }
 
+.book-container {
+  min-height: auto; /* Adjust this value according to your design */
+}
 
   

@@ -41,7 +41,7 @@ export default function Login() {
     let res= await login(user);
     dispatch(signInSuccess(res));
     setloader(false)
-    navigate('/book')
+    navigate('/')
     }
     catch(err)
     {

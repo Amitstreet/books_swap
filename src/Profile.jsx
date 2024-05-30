@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
-import { getbook_user } from './api/book';
+import { getbook_user,delate_book  } from './api/book';
 import Add_prod from './Components/form/add_prod.jsx';
 import { useNavigate } from 'react-router-dom';
-// import './Shimmer.css'; // Make sure to import the CSS file for the shimmer effect
 
 function Profile() {
   const user = useSelector(state => state.user.currentUser);
@@ -11,6 +10,7 @@ function Profile() {
   const [book, setbook] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [delbook,delatebook]= useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -31,6 +31,12 @@ function Profile() {
     seteditbook(editbookdetails[0]);
   }
 
+  const delate = async (e)=>{
+    const id = e.target.id;
+       let data=await delate_book({"id":id});
+        delatebook(true);
+  }
+
   if (!user) {
     return null; // Optionally, you can render a loading state or a message here.
   }
@@ -40,14 +46,14 @@ function Profile() {
       {editbook != null ? (
         <Add_prod editbook={editbook} seteditbook={seteditbook} />
       ) : (
-        <body className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white flex items-center justify-center min-h-screen p-4 transition-colors">
+        <div className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white flex items-center justify-center min-h-screen p-4 transition-colors">
           <div className="absolute top-4 right-4">
             <button onClick={() => toggleDarkMode()} className="bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all">
               Toggle Theme
             </button>
           </div>
-          <div className="w-34 py-8 w-[calc(100%_-_265px)] ml-auto mr-2">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 relative mt-[-162px]">
+          <div className="w-34 py-8 w-[calc(100%_-_265px)] ml-auto mr-2 max-h-[102rem] h-[56rem]">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 relative">
               <div className="absolute top-4 right-4">
                 <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
                   Edit
@@ -95,7 +101,7 @@ function Profile() {
                 </div>
               </div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-8">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-8 book-container">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Books</h3>
               {loading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
@@ -121,7 +127,7 @@ function Profile() {
                           <button id={ele._id} onClick={editbooks} className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
                             Edit
                           </button>
-                          <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
+                          <button id={ele._id}  onClick= {delate} className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
                             Delete
                           </button>
                         </div>
@@ -137,7 +143,7 @@ function Profile() {
               )}
             </div>
           </div>
-        </body>
+        </div>
       )}
     </div>
   );

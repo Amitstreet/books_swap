@@ -47,3 +47,12 @@ export const edit_book = async ({_id,id,bookname,writer,url,catogery,description
   }
 };
  
+
+export const delate_book = async ({id}) => {
+  try { 
+    const response = await axios.delete(`${BASE_URL}/delate_book/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data; // Handle logout errors
+  }
+};

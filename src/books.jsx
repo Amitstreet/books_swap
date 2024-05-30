@@ -32,38 +32,6 @@ function Books() {
 
   return (
     <div className="flex justify-center mt-14 mx-auto w-full max-w-screen-xl px-4">
-      <div className="Filter w-72 mx-4">
-        <ul className="flex flex-col">
-          {['Novel', 'Adventure', 'Romance', 'Study', 'Poetry'].map((genre) => (
-            <li key={genre} className="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border border-gray-200 text-gray-800 mt-2 first:rounded-t-lg last:rounded-b-lg dark:bg-neutral-900 dark:border-neutral-700 dark:text-white">
-              {genre}
-            </li>
-          ))}
-        </ul>
-        <div className="relative mb-6 mt-4">
-          <span className="inline-flex items-center mb-3 py-1.5 px-3 rounded-md text-xs font-medium border border-gray-200 bg-white text-gray-800 shadow-sm dark:bg-neutral-900 dark:border-neutral-700 dark:text-white">Price Range</span>
-          <input type="range" className="block w-full bg-gradient-to-r from-blue-400 to-blue-600 appearance-none rounded h-3 focus:outline-none overflow-hidden" min="0" max="1000" />
-          <div className="flex justify-between mt-2 text-sm text-gray-500 dark:text-gray-400">
-            <span>Min (0)</span>
-            <span>Max (1000)</span>
-          </div>
-        </div>
-        <div className="relative mb-6">
-          <span className="inline-flex items-center mb-3 py-1.5 px-3 rounded-md text-xs font-medium border border-gray-200 bg-white text-gray-800 shadow-sm dark:bg-neutral-900 dark:border-neutral-700 dark:text-white">Nearest Range</span>
-          <input type="range" className="block w-full bg-gradient-to-r from-blue-400 to-blue-600 appearance-none rounded h-3 focus:outline-none overflow-hidden" min="0" max="1000" />
-          <div className="flex justify-between mt-2 text-sm text-gray-500 dark:text-gray-400">
-            <span>Min (0)</span>
-            <span>Max (1000)</span>
-          </div>
-        </div>
-        <ul className="flex flex-col mt-4">
-          {['Novel', 'Adventure', 'Romance', 'Study', 'Poetry'].map((genre) => (
-            <li key={genre} className="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border border-gray-200 text-gray-800 mt-2 first:rounded-t-lg last:rounded-b-lg dark:bg-neutral-900 dark:border-neutral-700 dark:text-white">
-              {genre}
-            </li>
-          ))}
-        </ul>
-      </div>
       <div className="flex-grow max-w-4xl">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {book ? book.map((ele) => (
