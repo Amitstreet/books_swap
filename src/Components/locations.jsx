@@ -6,12 +6,7 @@ import {
     add_location,
   } from '../redux/user/userSlice.js'
 
-
-
 const LocationComponent = () => {
-
-    
-
     const { nlocation, error, loading } = useCurrentLocation();
     let dispatch= useDispatch();
     const user = useSelector(state => state.user.currentUser);
@@ -26,7 +21,6 @@ const LocationComponent = () => {
     {
     let coordinates= [];
     coordinates.push(nlocation.longitude,nlocation.latitude);
-       
                let userid=user._id;      
                add_current_location( {
                 "userid": userid ,

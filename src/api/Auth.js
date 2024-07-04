@@ -1,7 +1,7 @@
 // authApi.js
 import axios from 'axios';
 
-const BASE_URL = 'https://backend-1-dar6.onrender.com/api/auth'; // Replace with your API base URL
+const BASE_URL = 'http://localhost:5000/api/auth'; // Replace with your API base URL
 
 export const login = async ({email,password}) => {
   try {
@@ -30,7 +30,6 @@ export const signup = async ({username, email, password}) => {
   }
 };
 
-
 export const logout = async () => {
   try {
     const response = await axios.post(`${BASE_URL}/signout`);
@@ -39,6 +38,34 @@ export const logout = async () => {
     throw error.response.data; // Handle logout errors
   }
 };
+
+
+
+
+export const send_otp = async ({phoneNumber}) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/send-otp`,{
+      phoneNumber,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data; // Handle logout errors
+  }
+};
+
+export const verify_otp = async ({phoneNumber,otp}) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/verify-otp`,{
+      phoneNumber,
+      otp,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data; // Handle logout errors
+  }
+};
+
+
 
 // Other authentication API functions can be added here
 

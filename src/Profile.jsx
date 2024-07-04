@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
-import { getbook_user,delate_book  } from './api/book';
+import { getbook_user, delate_book } from './api/book';
 import Add_prod from './Components/form/add_prod.jsx';
 import { useNavigate } from 'react-router-dom';
+import LocationOtpForm from './Components/form/LocationOtpForm.jsx';
 
 function Profile() {
-  const user = useSelector(state => state.user.currentUser);
+  const nuser = useSelector(state => state.user.currentUser);
+  const [user, setuser] = useState(nuser);
   const [editbook, seteditbook] = useState(null);
   const [book, setbook] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [delbook,delatebook]= useState(false);
+  const [delbook, delatebook] = useState(false);
+  const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // State to control delete confirmation modal
+  const [bookToDelete, setBookToDelete] = useState(null); // State to hold the book ID to be deleted
 
   useEffect(() => {
     if (!user) {
@@ -23,18 +28,26 @@ function Profile() {
       }
       fetchBooks();
     }
-  }, [user, editbook, navigate]);
+  }, [user, editbook, navigate,showDeleteModal]);
 
   const editbooks = (e) => {
     const id = e.target.id;
-    const editbookdetails = book.filter(ele => ele._id === id);    
+    const editbookdetails = book.filter(ele => ele._id === id);
     seteditbook(editbookdetails[0]);
   }
 
-  const delate = async (e)=>{
+  const delate = (e) => {
     const id = e.target.id;
-       let data=await delate_book({"id":id});
-        delatebook(true);
+    setBookToDelete(id); // Set the book ID to be deleted
+    setShowDeleteModal(true); // Show the delete confirmation modal
+  }
+
+  const handleDeleteConfirm = async () => {
+    let data = await delate_book({ "id": bookToDelete });
+    console.log(data);
+    delatebook(true);
+    setShowDeleteModal(false); // Close the modal after deletion
+
   }
 
   if (!user) {
@@ -55,7 +68,7 @@ function Profile() {
           <div className="w-34 py-8 w-[calc(100%_-_265px)] ml-auto mr-2 max-h-[102rem] h-[56rem]">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 relative">
               <div className="absolute top-4 right-4">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
+                <button onClick={() => setShowModal(true)} className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
                   Edit
                 </button>
               </div>
@@ -85,7 +98,7 @@ function Profile() {
               <div className="mt-6 grid grid-cols-2 gap-4">
                 <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-200 mb-2">Location</h3>
-                  <p className="text-gray-600 dark:text-gray-400">San Francisco, CA</p>
+                  <p className="text-gray-600 dark:text-gray-400">{user.location}</p>
                 </div>
                 <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-200 mb-2">Email</h3>
@@ -93,7 +106,7 @@ function Profile() {
                 </div>
                 <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-200 mb-2">Phone</h3>
-                  <p className="text-gray-600 dark:text-gray-400">(123) 456-7890</p>
+                  <p className="text-gray-600 dark:text-gray-400">{user.MobileNumber}</p>
                 </div>
                 <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-200 mb-2">Website</h3>
@@ -127,7 +140,7 @@ function Profile() {
                           <button id={ele._id} onClick={editbooks} className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
                             Edit
                           </button>
-                          <button id={ele._id}  onClick= {delate} className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
+                          <button id={ele._id} onClick={delate} className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
                             Delete
                           </button>
                         </div>
@@ -141,6 +154,50 @@ function Profile() {
                   )}
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black opacity-50"></div>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 relative z-50 w-full max-w-md">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition"
+            >
+              &times;
+            </button>
+            <LocationOtpForm id={user._id} setuser={setuser} />
+          </div>
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black opacity-50"></div>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 relative z-50 w-full max-w-md">
+            <button
+              onClick={() => setShowDeleteModal(false)}
+              className="absolute top-4 right-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition"
+            >
+              &times;
+            </button>
+            <p className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Are you sure you want to delete this book?</p>
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 mr-2"
+              >
+                No
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300"
+              >
+                Yes
+              </button>
             </div>
           </div>
         </div>

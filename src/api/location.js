@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://backend-1-dar6.onrender.com/api/locations'; // Replace with your API base URL
+const BASE_URL = 'http://localhost:5000/api/locations'; // Replace with your API base URL
 
 export const add_current_location = async ({ userid, location }) => {
     try { 
