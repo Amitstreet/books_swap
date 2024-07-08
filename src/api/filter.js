@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:5000/api/filter/search'; // Replace with your API base URL
+const BASE_URL = 'https://backend-1-dar6.onrender.com/api/filter/search'; // Replace with your API base URL
 
 export const serch = async ({key }) => {
     try { 

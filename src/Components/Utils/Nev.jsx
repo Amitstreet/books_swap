@@ -20,13 +20,7 @@ function Nev() {
    const log=async ()=>{
         let res= logout();
         dispatch(signoutSuccess());
-        window.location.href = 'http://localhost:5000/logout';
-        axios.get('http://localhost:5000/logout', { withCredentials: true} ,)
-          .then(() => {
-            console.log("yes");
-            setUser(null);
-          });
-
+      
    }
 
 
