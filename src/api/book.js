@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // const BASE_URL = 'https://backend-1-dar6.onrender.com/api/books'; // Replace with your API base URL
-const BASE_URL = 'https://backend-1-dar6.onrender.com/api/books'; // Replace with your API base URL
+const BASE_URL = 'https://backend-cb6b.onrender.com/api/books'; // Replace with your API base URL
 
 export const add_book = async ({id,bookname,writer,url,catogery,description}) => {
   try {

@@ -1,7 +1,7 @@
 // authApi.js
 import axios from 'axios';
 
-const BASE_URL = 'https://backend-1-dar6.onrender.com/api/auth'; // Replace with your API base URL
+const BASE_URL = 'https://backend-cb6b.onrender.com/api/auth'; // Replace with your API base URL
 
 export const login = async ({email,password}) => {
   try {
