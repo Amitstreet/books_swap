@@ -7,14 +7,19 @@ function Nearest() {
   const user = useSelector(state => state);
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
     const nearestUser = async () => {
       let data = await getNearestLocation({ lng: user.user.location.longitude, lat: user.user.location.latitude });
+      console.log(data)
       setUser(data);
       setLoading(false);
     };
     nearestUser();
   }, [user.user.location.longitude, user.user.location.latitude]);
+
+
+
 
   return (
     <div className="w-34 py-8 w-[calc(100%_-_265px)] ml-auto mr-2">

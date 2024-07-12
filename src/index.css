@@ -79,3 +79,9 @@
 }
 
   
+/* styles.css */
+.map {
+  height: 100vh;
+  width: calc(100% - 250px); /* Adjust 250px based on your sidebar width */
+  margin-left: 250px; /* Adjust 250px based on your sidebar width */
+}

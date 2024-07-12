@@ -5,6 +5,7 @@ const initialState = {
   error: null,
   loading: false,
   location:null,
+  nearlocation:[],
 };
 
 const userSlice = createSlice({
@@ -58,6 +59,9 @@ const userSlice = createSlice({
     add_location:(state,action)=>
     {
       state.location=action.payload
+    },
+    nearlocation:(state,action)=>{
+      state.nearlocation=action,payload
     }
   },
 });

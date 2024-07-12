@@ -13,10 +13,7 @@ function Nev() {
 
   
   const dispatch = useDispatch();
-  const user = useSelector(state => state);
-
-
-  
+  const user = useSelector(state => state);  
    const log=async ()=>{
         let res= logout();
         dispatch(signoutSuccess());

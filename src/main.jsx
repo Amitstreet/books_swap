@@ -19,6 +19,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import Profile from './Profile.jsx'
 import Nearest from "./nearest.jsx";
+import MapComponent from "./map.jsx";
 const AppLayout = () => {
   return (
     <>
@@ -94,7 +95,11 @@ const router = createBrowserRouter([
       }
       ,{
         path:"/nearest",
-        element:<Nearest/>
+        element:<Nearest />
+      }
+      ,{
+        path:"/map",
+        element:<MapComponent />
       }
 ,
     ],
