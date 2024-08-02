@@ -11,15 +11,20 @@ import {
 
 function Nev() {
 
+  console.log("sddgsdbsfg")
   
   const dispatch = useDispatch();
   const user = useSelector(state => state);  
    const log=async ()=>{
+
         let res= logout();
         dispatch(signoutSuccess());
       
    }
 
+   const handle=()=>{
+    console.log("no");
+   }
 
 
   return (
@@ -123,6 +128,7 @@ function Nev() {
               </button>
               <div className="hs-dropdown relative inline-flex z-50 [--placement:bottom-right]">
                 <button
+                  onClick={handle}
                   id="hs-dropdown-with-header"
                   type="button"
                   className="hs-dropdown-toggle inline-flex flex-shrink-0 justify-center items-center gap-2 h-[2.375rem] w-[2.375rem] rounded-full font-medium bg-white text-gray-700 align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-white transition-all text-xs dark:bg-slate-900 dark:hover:bg-slate-800 dark:text-gray-400 dark:hover:text-white dark:focus:ring-gray-700 dark:focus:ring-offset-slate-900"
