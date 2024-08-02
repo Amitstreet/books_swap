@@ -4,6 +4,7 @@ import axios from 'axios';
 const BASE_URL = 'https://backend-cb6b.onrender.com/api/auth'; // Replace with your API base URL
 
 export const login = async ({email,password}) => {
+  console.log(email,password)
   try {
     const response = await axios.post(`${BASE_URL}/signin`, {
       email,
